@@ -20,6 +20,8 @@ class ImageSearch extends Component {
     page: 1,
   };
 
+  totalPages = null;
+
   componentDidUpdate(_, prevState) {
     const { pictureRequest, page } = this.state;
 
@@ -27,21 +29,22 @@ class ImageSearch extends Component {
       prevState.pictureRequest !== pictureRequest ||
       prevState.page !== page
     ) {
-      this.fetchImages();
+      this.fetchImages(pictureRequest, page);
     }
   }
 
-  async fetchImages() {
-    const { pictureRequest, page } = this.state;
-
+  async fetchImages(pictureRequest, page) {
     try {
       this.setState({ status: 'pending' });
       const data = await searchImages(pictureRequest, page);
+      this.totalPages = Math.ceil(data.totalHits / 12);
       this.setState(({ images }) => ({ images: [...images, ...data.hits] }));
     } catch (error) {
       this.setState({ error: error, status: 'rejected' });
     } finally {
-      this.setState({ status: 'resolved' });
+      this.setState({
+        status: `${page !== this.totalPages ? 'resolved' : 'idle'}`,
+      });
     }
   }
 
@@ -52,7 +55,16 @@ class ImageSearch extends Component {
         { position: toast.POSITION.TOP_RIGHT }
       );
 
-    this.setState({ pictureRequest, page: 1, images: [] });
+    if (pictureRequest.trim() === '')
+      return toast.warn('Empty string isn`t valid value', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+    this.setState({
+      pictureRequest: pictureRequest,
+      page: 1,
+      images: [],
+    });
   };
 
   onLoadMoreBtnClick = () => {
