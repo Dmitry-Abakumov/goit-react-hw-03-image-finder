@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import PropTypes from 'prop-types';
 
 import css from './Searchbar.module.css';
 
@@ -56,3 +57,7 @@ class Searchbar extends Component {
 }
 
 export default Searchbar;
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
