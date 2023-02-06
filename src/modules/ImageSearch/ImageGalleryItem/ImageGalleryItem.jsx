@@ -11,13 +11,11 @@ class ImageGalleryItem extends Component {
 
   openModal = e => {
     this.setState({ showModal: true });
-    console.log('Снова открыли');
   };
 
   closeModal = e => {
     if (e.target === e.currentTarget || e.code === 'Escape') {
       this.setState({ showModal: false });
-      console.log('Закрыли');
     }
   };
 
@@ -34,11 +32,9 @@ class ImageGalleryItem extends Component {
           alt={tags}
         />
         {showModal && (
-          <Modal
-            largeImage={largeImage}
-            tags={tags}
-            onCloseModal={this.closeModal}
-          />
+          <Modal onCloseModal={this.closeModal}>
+            <img src={largeImage} alt={tags} />
+          </Modal>
         )}
       </li>
     );
