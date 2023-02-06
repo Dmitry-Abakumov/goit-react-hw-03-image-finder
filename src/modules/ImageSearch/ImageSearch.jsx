@@ -69,7 +69,7 @@ class ImageSearch extends Component {
         {images.length > 0 && <ImageGallery images={images} />}
 
         <div className={css.wrapper}>
-          {status === 'resolved' && (
+          {status === 'resolved' && images.length > 0 && (
             <Button onClick={this.onLoadMoreBtnClick}>Load more</Button>
           )}
 
